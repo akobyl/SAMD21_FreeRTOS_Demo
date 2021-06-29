@@ -11,7 +11,7 @@ project(SAMD-Demo)
 set(EXECUTABLE ${PROJECT_NAME}.elf)
 set(LINKER_FILE ${CMAKE_SOURCE_DIR}/samd21d/gcc/gcc/samd21g17d_flash.ld)
 
-#-T"../samd21d/gcc/gcc/samd21g17d_flash.ld" \
+#-T"../samd21d/gcc/gcc/samd21g17d_flash.ld"
 enable_language(C ASM)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -23,7 +23,37 @@ message(STATUS "CMAKE_TOOLCHAIN_FILE is: ${CMAKE_TOOLCHAIN_FILE}")
 # List of source files
 set(SRC_FILES
         src/main.c
+        src/driver_init.c
+        hal/src/hal_atomic.c
+        hal/src/hal_dac_os.c
+        hal/src/hal_delay.c
+        hal/src/hal_gpio.c
+        hal/src/hal_init.c
+        hal/src/hal_io.c
+        hal/src/hal_sleep.c
+        hal/utils/src/utils_assert.c
+        hal/utils/src/utils_event.c
+        hal/utils/src/utils_list.c
+        hpl/core/hpl_core_m0plus_base.c
+        hpl/core/hpl_init.c
+        hpl/dac/hpl_dac.c
+        hpl/dmac/hpl_dmac.c
+        hpl/gclk/hpl_gclk.c
+        hpl/pm/hpl_pm.c
+        hpl/sysctrl/hpl_sysctrl.c
+        hpl/tc/tc_lite.c
         samd21d/gcc/gcc/startup_samd21.c
+        samd21d/gcc/system_samd21.c
+        thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/croutine.c
+        thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/event_groups.c
+        thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/list.c
+        thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/queue.c
+        thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/stream_buffer.c
+        thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/tasks.c
+        thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/timers.c
+        thirdparty/RTOS/freertos/FreeRTOSV10.0.0/rtos_port.c
+        thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/GCC/ARM_CM0/port.c
+        thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/MemMang/heap_2.c
         )
 
 # Build the executable based on the source files
@@ -34,19 +64,28 @@ target_compile_definitions(${EXECUTABLE} PRIVATE
         -D__SAMD21G17D__
         )
 
-# List of includ directories
+# List of include directories
 target_include_directories(${EXECUTABLE} PRIVATE
         src 
         CMSIS
         CMSIS/Core/Include
         config
-        hal
-        hpl
+        hal/include
+        hal/utils/include
+        hpl/core
+        hpl/include
+        hpl/port
+        hpl/tc
+        hpl/gclk
+        hpl/pm
+        hri
         samd21d/include
         samd21d/include/component
         samd21d/include/pio
         thirdparty/RTOS
-        thirdparty/RTOS/freertos
+        thirdparty/RTOS/freertos/FreeRTOSV10.0.0
+        thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/include
+        thirdparty/RTOS/freertos/FreeRTOSV10.0.0/Source/portable/GCC/ARM_CM0
         )
 
 # Compiler options

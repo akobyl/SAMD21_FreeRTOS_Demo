@@ -1,13 +1,26 @@
-// #include <atmel_start.h>
+#include <FreeRTOS.h>
+#include <task.h>
+
+static TaskHandle_t xDemotask;
+
+#include "driver_init.h"
+
+static void demo_task(void *p)
+{
+    volatile int x = 0;
+    for(;;)
+    {
+        vTaskDelay(1000);
+        x += 1;
+    }
+}
 
 int main(void)
 {
-	/* Initializes MCU, drivers and middleware */
-	// atmel_start_init();
+    /* Initializes MCU, drivers and middleware */
+    system_init();
+    
+    xTaskCreate(demo_task, "Demo", configMINIMAL_STACK_SIZE, NULL, 1, xDemotask);
 
-	/* Replace with your application code */
-	volatile int x = 0;
-	while (1) {
-		x += 1;
-	}
+    vTaskStartScheduler();
 }
